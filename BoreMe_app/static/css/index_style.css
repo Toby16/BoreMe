@@ -1,0 +1,41 @@
+body {
+    background-color: rgb(23, 5, 124);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 5px solid white;
+    border-radius: 20px;
+}
+
+#main_title {
+    border-radius: 15px;
+    border: 2px solid white;
+    padding: 10px 90px;
+}
+
+button {
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-weight: bold;
+}
+
+#instruction {
+    font-weight: bold;
+    text-align: center;
+}
+
+#instruction_button {
+    text-align: center;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 768px) {
+    #main_title {
+        padding: 10px 50px;
+    }
+}
