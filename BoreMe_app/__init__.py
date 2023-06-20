@@ -11,5 +11,6 @@ db = SQLAlchemy(app) # database object
 migrate = Migrate(app, db) # migration object
 
 login = LoginManager(app) # object to manage user logged-in state
+login.login_view = "login" # requiring users to login
 
 from BoreMe_app import routes, models
