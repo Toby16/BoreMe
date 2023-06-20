@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if title %}
+    <title>BoreMe - {{ title }}</title>
+    {% else %}
+    <title>BoreMe - Registeration</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/register_style.css') }}">
+</head>
+<body>
+    <div id="header">
+        <h1><a href="{{ url_for('welcome') }}">Welcome to BoreMe</a></h1>
+        <h4>Create a new account!</h4>
+    </div>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}:
+            <br>
+            {{ form.username(size=32,
+                placeholder="Enter your Username",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.username.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.email.label }}:
+            <br>
+            {{ form.email(size=32,
+                placeholder="Enter your Username",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.email.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}:
+            <br>
+            {{ form.password(size=32,
+                placeholder="Enter your Password",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.password.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password2.label }}:
+            <br>
+            {{ form.password2(size=32,
+                placeholder="Enter your Username",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.password2.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+         <p> {{ form.submit }}</p>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">click here</a></p>
+</body>
+</html>
