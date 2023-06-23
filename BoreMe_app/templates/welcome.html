@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bore-Me - Welcome</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_style.css') }}">
+</head>
+<body>
+    <div>
+        <header>
+            <h1 id="main_title">Bore-ME!</h1>
+        </header>
+        <p id="instruction">Click below to continue</p>
+        <div id="instruction_button">
+            <button id="tutorialButton">Tutorial</button>
+            <button id="loginButton">Login</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/tutorial_script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if title %}
+    <title>BoreMe - {{ title }}</title>
+    {% else %}
+    <title>BoreMe - Login</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/login_style.css') }}">
+</head>
+<body>
+    
+    <div id="header">
+        <h1><a href="{{ url_for('welcome') }}">Welcome to BoreMe</a></h1>
+        <h4>Sign-in to your account!</h4>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <span>{{ message }}</span>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    <form action="" method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}:
+            <br>
+            {{ form.username(size=32,
+                placeholder="Enter your Username",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.username.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}:
+            <br>
+            {{ form.password(size=32,
+                placeholder="Enter your Password",
+                style="border-radius: 15px; padding: 2px 0px 2px 5px; width: auto") }}
+            <br>
+            {% for error in form.password.errors %}
+            <div id="login_error">
+                {{ error }}
+            </div>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.remember_me() }} {{ form.remember_me.label }}
+        </p>
+        <p> {{ form.submit }}</p>
+    </form>
+    <p>New User? <a href="{{ url_for('register') }}">click to register</a></p>
+</body>
+</html>

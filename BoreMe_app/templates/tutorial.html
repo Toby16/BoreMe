@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoreMe Game Tutorial</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/tutorial_style.css') }}">
+</head>
+<body>
+    <div>
+        <div id="tutorial_content">
+            <h2>Welcome to Bore-Me Game Tutorial</h2>
+            <p id="tutorial_intro_text"></p>
+
+            <div id="game_objective">
+                <strong id="game_objective_title">Objective:</strong>
+                <p id="game_objective_text"></p>
+            </div>
+
+            <hr>
+            <div id="game_rules">
+                <strong id="game_rules_title">Game Rules:</strong>
+                <ol id="game_rules_list"></ol>
+            </div>
+
+            <hr>
+            <div id="team_Communication">
+                <strong id="team_communication_title">Team Communication</strong>
+                <p id="team_communication_text"></p>
+            </div>
+
+            <hr>
+            <div id="chat_features">
+                <p><strong id="team_chat_title">Team Chat:</strong><span id="team_chat_text"></span></p>
+                <p><strong id="general_chat_title">General Chat:</strong><span id="general_chat_text"></span></p>
+            </div>
+
+            <hr>
+            <div id="getting_started">
+                <strong id="getting_started_title">Let's get started:</strong>
+                <ol id="getting_started_list"></ol>
+            </div>
+
+            <p id="ending_text"></p>
+        </div>
+
+        <div id="back-button-container">
+            <button id="back_button">Back</button>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/tutorial_animate.js') }}"></script>
+</body>
+</html>
