@@ -2,6 +2,7 @@ body {
     background-color: rgb(23, 5, 124);
     color: white;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -16,6 +17,8 @@ body {
     border-radius: 15px;
     border: 2px solid white;
     padding: 10px 90px;
+    margin-bottom: 20px;
+    text-align: center;
 }
 
 button {
@@ -31,6 +34,10 @@ button {
 
 #instruction_button {
     text-align: center;
+}
+
+#flash_message {
+    padding: 10px;
 }
 
 /* Media Query for Mobile */
