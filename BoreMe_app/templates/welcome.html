@@ -9,6 +9,15 @@
 </head>
 <body>
     <div>
+        <p id="flash_message">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </p>
         <header>
             <h1 id="main_title">Bore-ME!</h1>
         </header>
