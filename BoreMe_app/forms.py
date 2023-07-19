@@ -1,7 +1,7 @@
 # ----- see if you can use 'Helvetica Neue' as the font-family for the login and sign-up page
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from BoreMe_app.models import User
 
@@ -30,3 +30,10 @@ class RegisterationForm(FlaskForm):
         email = User.query.filter_by(email=email.data).first()
         if email is not None:
             raise ValidationError("Account already exists")
+        
+
+
+# form for user to guess number in player_vs_pc mode
+class PlayerVsPcForm(FlaskForm):
+    user_input = IntegerField("Enter number", validators=[DataRequired()])
+    submit = SubmitField("Enter")

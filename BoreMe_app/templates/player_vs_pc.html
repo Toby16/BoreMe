@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoreMe Game - {{ title }}</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/player_vs_pc.css') }}">
+</head>
+<body>
+    <h1 id="heading"><a href="{{ url_for('home') }}">BoreMe Game</a> - player vs pc</h1>
+    <div id="main_game">
+        <div id="pc_status">
+            <div id="pc_score">
+                <p>PC: <span id="pc_score_value">{{ pc_score }}</span></p>
+            </div>
+            <p id="pc_status_value">{{ pc_status }}</p>
+        </div>
+        <hr>
+        <div id="game_status">
+            <strong><span id="game_status_value">{{ game_status }}</span></strong>
+        </div>
+        <hr>
+        <div id="player_status">
+            <p id="player_status_value">{{ player_status }}</p>
+            <div id="player_score">
+                <p>{{ current_user.username }}: <span id="player_score_value">{{ player_score }}</span></p>
+            </div>
+            <div>
+                <form id="player_vs_pc_form" method="POST" novalidate>
+                    <p>
+                        {{ form.user_input.label }}:
+                        <br>
+                        {{  form.user_input(id="user_input") }}
+
+                    </p>
+                    <p>
+                        {{ form.submit() }}
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/player_vs_pc.js') }}"></script>
+</body>
+</html>

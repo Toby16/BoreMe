@@ -1,0 +1,52 @@
+body {
+    background-color: rgb(23, 5, 124);
+    border: 5px solid white;
+    border-radius: 20px;
+    margin: 0;
+    padding: 20px;
+}
+
+a, h1 {
+    color: white;
+    text-align: center;
+}
+
+h1{
+    margin-bottom: 50px;
+}
+
+#chat-container {
+    max-width: 800px; /* Adjust the width as per your preference */
+    width: 90%;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+
+#message-container {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: white;
+    position: relative;
+}
+
+#input-container {
+    display: flex;
+    gap: 10px;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 5px;
+}
+
+#send-button {
+    padding: 5px 10px;
+}
+

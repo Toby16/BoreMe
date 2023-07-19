@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoreMe Game - {{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/player_vs_player.css') }}">
+</head>
+<body>
+    <div class="container">
+        <p>Not Available in your country</p>
+        <p><small>Coming soon!
+            <br>
+            <a href="{{ url_for('home') }}">Back</a> <a href="{{ url_for('logout') }}">Logout</a>
+        </small></p>
+    </div>
+</body>
+</html>

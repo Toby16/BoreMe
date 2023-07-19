@@ -1,0 +1,122 @@
+
+
+/*
+body {
+    background-color: rgb(23, 5, 124);
+    color: white;
+    margin: 0;
+    border: 5px solid white;
+    border-radius: 20px;
+    padding: 30px;
+    text-align: center;
+}
+
+#heading {
+    padding: 20px;
+    border: 2px solid white;
+    border-radius: 15px;
+    margin: 0px 10px 30px 10px;
+    font-size:large;
+}
+
+a {
+    color: white;
+}
+
+
+#main_game {
+    border: 5px solid white;
+    border-radius: 15px;
+    margin: 10px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
+
+input[type="submit"] {
+    cursor: pointer;
+    padding: 3px 25px;
+    border-radius: 15px;
+}
+
+#game_status {
+    padding: 20px;
+    margin: 10px;
+}
+
+#game_status_value {
+    cursor: pointer;
+    border: 2px solid white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: rgb(2, 2, 63);
+}
+
+#pc_status,
+#player_status {
+    border: 5px solid white;
+    border-radius: 15px;
+    margin: 10px;
+}
+*/
+
+
+body {
+    background-color: rgb(23, 5, 124);
+    color: white;
+    margin: 0;
+    border: 5px solid white;
+    border-radius: 20px;
+    text-align: center;
+    height: max-content;
+    padding: 20px;
+}
+
+#heading {
+    padding: 10px;
+    border: 2px solid white;
+    border-radius: 15px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+a {
+    color: white;
+}
+
+#main_game {
+    border: 5px white solid;
+    border-radius: 15px;
+    margin: 30px 100px 20px 100px;
+}
+
+input[type="submit"] {
+    cursor: pointer;
+    padding: 3px 25px;
+    border-radius: 15px;
+}
+
+#game_status
+{
+    border: 5px white solid;
+    border-radius: 15px;
+    padding: 50px;
+    margin: 20px;
+    
+}
+
+#game_status_value
+{
+    cursor: pointer;
+    border: 3px solid white;
+    padding: 10px;
+    border-radius: 20px;
+    background-color: rgb(2, 2, 63);
+}
+
+#pc_status,
+#player_status {
+    border: 5px white solid;
+    border-radius: 15px;
+    margin: 20px;
+}

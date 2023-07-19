@@ -4,11 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bore-Me - Welcome</title>
+    <title>BoreMe - Welcome</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index_style.css') }}">
 </head>
 <body>
     <div>
+        <p id="flash_message">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+        </p>
         <header>
             <h1 id="main_title">Bore-ME!</h1>
         </header>
