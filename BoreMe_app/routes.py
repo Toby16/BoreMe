@@ -1,10 +1,20 @@
-from BoreMe_app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from BoreMe_app import app, db, socketio
+from flask_socketio import emit
+from flask import render_template, flash, redirect, url_for, request, jsonify, session
 from BoreMe_app.forms import LoginForm, RegisterationForm, PlayerVsPcForm
 from flask_login import current_user, login_user, logout_user, login_required
 from BoreMe_app.models import User
 from werkzeug.urls import url_parse
 import random # for game logic
+
+"""
+Things left to complete
+1. when the player or pc score gets to 10, the game ends
+the player gets redirected to the home page to pick a mode and start a new game
+A flashed message will be displayed in the game-mode page indicating whether the player or the pc won
+
+2. to fix the game status (  `game_status = "Click to generate new number"` when pc gets a point)
+"""
 
 # view funtion to welome page
 @app.route("/")
@@ -101,52 +111,51 @@ def generate_random_number():
     return random.randint(1, 100)
 
 
-# Compare the guess with the target number
-def compare_guess(guess, target_number):
-    if guess == target_number:
-        return "Correct"
-    elif guess < target_number:
-        return "Too low"
-    else:
-        return "Too high"
-
-
-
-
-from flask import jsonify, session
-
 @app.route("/start/game/vs_pc", methods=["GET", "POST"])
 @login_required
 def start_game_pc():
     form = PlayerVsPcForm()
-    # session["target_number"] = None
-    # print("form.submit.data:", form.submit.data)
 
-    if request.method == "POST": # and target_number is None and (form.submit.data is False):
+    if request.method == "POST":
         # Generate the random number and store it in the session
+        session["prev_target_number"] = None ##
         target_number = generate_random_number()
+        session["target_number"] = target_number ##
         session['target_number'] = target_number
-        print("target number -:", target_number)  # for testing - will remove later
+        # print("target number:", target_number)  # for testing - will remove later
         return jsonify(target_number=target_number, player_status="waiting")
-    """
-    elif request.method == "POST" and target_number is not None and (form.submit.data is False):
-        print("target number:", target_number) # for testing - will remove later
-        print("request.form:", request.form) # for testing - will remove later
-        print("form.submit.data:", form.submit.data) # for testing - will remove later
-        form.submit.data = True
-        return jsonify(target_number=target_number, player_status="waiting")
-    """
 
     game_status = "Click here to start"
+    session["game_status"] = game_status #
+
     player_score = 0
-    session["player_score"] = player_score
     pc_score = 0
+    session["player_score"] = player_score
     session["pc_score"] = pc_score
-    # form.submit.data = True
+
+    session["pc_high"] = 100
+    session["pc_low"] = 1
 
     player_status = "waiting"
-    # if form.validate_on_submit():
-    
+    pc_status = "waiting"
+
+    ## -----------------------------
+    """
+    To redirect page back to route function
+    with message of who wins in the 'player_vs_pc' mode
+    """
+    """
+    player_score = session.get("player_score")
+    pc_score = session.get("pc_score")
+
+    if player_score == 10:
+        flash("{} won!".format(current_user.username))
+        return redirect(url_for("home"))
+    elif pc_score == 10:
+        flash("PC won!")
+        return redirect(url_for("home"))
+    """
+    ## ---------------------------------
 
     return render_template("player_vs_pc.html",
                            title="Player vs PC",
@@ -154,55 +163,225 @@ def start_game_pc():
                            player_score=player_score,
                            pc_score=pc_score,
                            form=form,
-                           player_status=player_status
+                           player_status=player_status,
+                           pc_status=pc_status
                            )
 
 
-@app.route("/start/game/vs_player_play", methods=["POST"])
+@app.route("/start/game/vs_pc/player", methods=["POST"])
 def user_submit():
-    # if request.method == "POST" and target_number is not None and form.submit.data is True:
     target_number = session.get('target_number')  # Retrieve the stored target number from the session
     json_data = request.get_json()
-    user_input = int(json_data['user_input'])
+    prev_guess = session.get('user_input')
+    user_input = None
+    difference = None
+    game_status = "Random number generated"
+    try:
+        user_input = int(json_data['user_input'])
+        difference = target_number - user_input
+    except:
+        player_status = "Invalid input"
     # user_input = int(form.user_input.data)
-    print("user_input:", user_input)  # for testing - will remove later
+    # print("user_input:", user_input)  # for testing - will remove later
     player_score = session.get("player_score") + 1
-    difference = abs(target_number - user_input)
 
-    if difference == 0:
+    if type(difference) is not int:
+        player_status = "Invalid input"
+    elif difference == 0:
         player_status = "Correct"
-        session["player_score"] = player_score
+        if prev_guess == user_input:
+            session["player_score"] += 0  # same as `player_score = session.get("player_score")`
+        else:
+            session["player_score"] = player_score
+        game_status = "Click to generate new number"
+        session["game_status"] = game_status
+        game_status = session.get("game_status")
         # session["target_number"] = generate_random_number()
-    elif difference > 10:
-        player_status = "Too far"
+    elif difference in range(1, 11):
+        player_status = "little low"
+    elif difference in range(-10, 0):
+        player_status = "little high"
+    elif difference in range(11, 21):
+        player_status = "low"
+    elif difference in range(-20, -10):
+        player_status = "high"
+    elif difference in range(21, 31):
+        player_status = "very low"
+    elif difference in range(-30, -20):
+        player_status = "very high"
     else:
-        player_status = "Near"
+        player_status = "too far"
+
+    session["user_input"] = user_input
+
+    ## ------------------------------------------
+    player_score = session.get("player_score")
+
+    """
+    if player_score == 10:
+        flash("{} won!".format(current_user.username))
+        return redirect(url_for("home"))
+    """
+    ## ----------------------------------------------
+    
     return jsonify(player_status=player_status,
                    player_score=session.get("player_score"),
-                   pc_score=session.get("pc_score")), 200
+                   pc_score=session.get("pc_score"),
+                   game_status=game_status), 200
+                   
 
 
-@app.route("/start/game/vs_pc_play", methods=["POST"])
+# generate random number for pc
+def generate_pc_guess(x=1, y=100):
+    return random.randint(x, y)
+
+
+@app.route("/start/game/vs_pc/pc", methods=["POST"])
 def pc_submit():
     """
-    # if request.method == "POST" and target_number is not None and form.submit.data is True:
-    target_number = session.get('target_number')  # Retrieve the stored target number from the session
-    json_data = request.get_json()
-    user_input = int(json_data['user_input'])
-    # user_input = int(form.user_input.data)
-    print("user_input:", user_input)  # for testing - will remove later
-    player_score = session.get("player_score") + 1
-    difference = abs(target_number - user_input)
+    pc_submit: function to generate random number for pc according to predefined rules
+    Report:
+        this function works properly but it has a little problem..
+        it isn't efficient enough as it takes the pc a little more time to get the target_number
 
-    if difference == 0:
-        player_status = "Correct"
-        session["player_score"] = player_score
-        # session["target_number"] = generate_random_number()
-    elif difference > 10:
-        player_status = "Too far"
-    else:
-        player_status = "Near"
-    return jsonify(player_status=player_status,
-                   player_score=session.get("player_score"),
-                   pc_score=session.get("pc_score")), 200
+        This makes the player vs pc mode a little easier for the player/user to play
     """
+    target_number = session.get('target_number')  # Retrieve the stored target number from the session
+    prev_guess = session.get('pc_input')  # Retrieve the previous guess from the session
+    # pc_high = session.get("pc_high")# 100
+    # pc_low = session.get("pc_low")  # 1
+    pc_high = session.get("pc_high")
+    pc_low = session.get("pc_low")
+    game_status = "Random number generated"
+
+
+
+    # Logic to generate the PC's guess
+    if (prev_guess is None) or (session["prev_target_number"] != session["target_number"]):
+        """
+        This conditional statement is created to improve and fix the pc's guessing ability.
+        When a random number gets generated, it gets stored in a session 'session["target_number"]'.
+        'session["target_number"]' gets compared with 'session["prev_target_number"]',
+          which is the previous target number before a new random number gets generated.
+
+        if session["prev_target_number"] is not same with session["target_number"],
+         then it means the pc's guession algorithm starts afresh to guess the newly generated target number
+         else, it should continue with it's current guessing and not start over again.
+
+        Also, the pc_low and pc_high gets reset back to it's default value in the session
+        """
+        session["prev_target_number"] = session["target_number"]
+        session["pc_low"] = 1
+        session["pc_high"] = 100
+        pc_low = session["pc_low"]
+        pc_high = session["pc_high"]
+        pc_input = generate_pc_guess()
+        session["pc_input"] = pc_input
+    else:
+        if prev_guess == target_number:
+            pc_input = prev_guess
+        elif prev_guess > target_number:
+            session["pc_high"] = prev_guess
+            pc_high = session.get("pc_high")
+            # pc_input = generate_pc_guess(pc_low, pc_high - 1)
+            if pc_low < (pc_high - 1):
+                pc_input = generate_pc_guess(pc_low, pc_high - 1)
+            elif pc_low == pc_high - 1:
+                pc_input = pc_low  # or 'pc_high - 1'
+            else:
+                # Handle the case where pc_low is greater than pc_high - 1 (should not happen)
+                pc_input = generate_pc_guess(pc_high - 1, pc_low)
+        else:
+            session["pc_low"] = prev_guess
+            pc_low = session.get("pc_low")
+            # pc_input = generate_pc_guess(pc_low + 1, pc_high)
+            if pc_low + 1 < pc_high:
+                pc_input = generate_pc_guess(pc_low + 1, pc_high)
+            elif pc_low + 1 == pc_high:
+                pc_input = pc_low + 1  # or 'pc_high'
+            else:
+                # Handle the case where pc_high is less than pc_low + 1 (should not happen)
+                pc_input = generate_pc_guess(pc_low, pc_high)
+
+
+    pc_score = session.get("pc_score") + 1
+    # Calculate the difference between PC's guess and the target number
+    difference = target_number - pc_input
+
+    # Determine the PC's status based on the difference
+    if type(difference) is not int:
+        pc_status = "Invalid input"
+    elif difference == 0:
+        pc_status = "Correct"
+        session["pc_low"] = 1 #
+        session["pc_high"] = 100 #
+        if prev_guess == target_number:
+            session["pc_score"] += 0
+        else:
+            session["pc_score"] = pc_score
+        game_status = "Click to generate new number"
+        session["game_status"] = game_status
+        game_status = session.get("game_status")
+    elif difference in range(1, 11):
+        pc_status = "little low"
+    elif difference in range(-10, 0):
+        pc_status = "little high"
+    elif difference in range(11, 21):
+        pc_status = "low"
+    elif difference in range(-20, -10):
+        pc_status = "high"
+    elif difference in range(21, 31):
+        pc_status = "very low"
+    elif difference in range(-30, -20):
+        pc_status = "very high"
+    else:
+        pc_status = "too far"
+
+    # Update the session with the current guess
+    session["pc_input"] = pc_input
+
+    pc_score = session.get("pc_score")
+    ## ---------------------------------------------
+    """
+    if pc_score == 10:
+        flash("PC won!")
+        return redirect(url_for("home"))
+    """
+    ## -------------------------------------
+
+    return jsonify(pc_input=pc_input,
+                   pc_status=pc_status,
+                   pc_score=pc_score,
+                   game_status=game_status), 200
+
+
+
+## settings for 'Group vs Group mode' - Coming Soon!
+@app.route("/start/game/player_vs_player/")
+def group_vs_group():
+    title = "player_vs_player"
+    return render_template("player_vs_player.html", title=title)
+
+
+
+
+## settings for 'player_vs_player' mode
+@app.route("/start/game/chat_room/", methods=["GET", "POST"])
+def player_vs_player():
+    user_name = current_user.username
+    return render_template("chat.html", user_name=user_name, title="General Chat")
+
+@socketio.on("connect")
+def chat_connect():
+    print("Client Connected!")
+
+@socketio.on("disconnect")
+def chat_disconnect():
+    print("Client Disconnected")
+
+@socketio.on("message")
+def chat_message(data):
+    name = current_user.username  #current user's username
+    msg = "{}: {}".format(name, data)
+    print(msg)
+    emit("message", msg, broadcast=True, include_self=False)
