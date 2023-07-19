@@ -6,6 +6,54 @@ body {
     padding: 0;
     border: 5px solid white;
     border-radius: 20px;
+}
+
+#tutorial_content {
+    max-width: 600px;
+    margin: -15px auto 20px auto;
+    padding: 20px;
+    text-align: left;
+    min-height: calc(100vh - 250px);
+}
+
+button {
+    cursor: pointer;
+    border-radius: 20px;
+    padding: 5px 40px;
+    font-weight: bold;
+    margin-top: 30px;
+    border: 2px solid white;
+    margin-bottom: 100px;
+}
+
+/* Media Query for Mobile */
+@media (max-width: 768px) {
+    #tutorial_content {
+        max-width: 400px;
+        padding: 10px;
+    }
+
+    button {
+        padding: 5px 20px;
+        margin-top: 20px;
+    }
+}
+
+
+
+
+
+
+
+/*
+body {
+    background-color: rgb(23, 5, 124);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    border: 5px solid white;
+    border-radius: 20px;
     padding: 10px;
 }
 
@@ -59,7 +107,7 @@ section#team_chat_text {
     display: inline;
 }
 
-/* Media Query for Mobile */
+/* Media Query for Mobile
 @media (max-width: 768px) {
     h2 {
         font-size: 20px;
@@ -96,3 +144,4 @@ section#team_chat_text {
         margin-top: 20px;
     }
 }
+*/
