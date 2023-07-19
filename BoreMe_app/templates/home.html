@@ -24,11 +24,21 @@
         {% endif %}
     </div>
     <div id="content">
-        <p id="game_mode_title">Pick a mode</p>
+        <p id="game_mode_title">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <span>{{ message }}</span>
+            <br>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            Pick a mode
+        </p>
         <p id="game_mode">
-            <button id="player_vs_pc">Player vs. PC</button>
+            <button id="player_vs_pc">Player vs PC</button>
             <button id="player_vs_player">Player vs Player</button>
-            <button id="group_vs_group">Group vs Group</button>
+            <button id="chat_room">General Chat</button>
         </p>
     </div>
     <script src="{{ url_for('static', filename='js/game_mode.js') }}"></script>
