@@ -22,9 +22,11 @@ body {
 }
 
 button {
+    cursor:pointer;
     border-radius: 15px;
     padding: 5px 10px;
     font-weight: bold;
+    margin: 0px 7px;
 }
 
 #instruction {
